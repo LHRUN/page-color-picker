@@ -2,8 +2,10 @@ import { FC } from 'react'
 import { ColorPicker } from '@/utils/colorPicker'
 
 const Home: FC = () => {
-  const color = new ColorPicker()
-
+  const colorChange = (color: string) => {
+    console.log(color)
+  }
+  const color = new ColorPicker(colorChange)
   const picker = () => {
     color.initCanvas()
   }

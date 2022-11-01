@@ -22,10 +22,10 @@ export const toHexString = (colorObj: IColorObj) => {
   }`
 }
 
-export const createContainerEl = <T extends keyof HTMLElementTagNameMap>(
+export const createDocument = <T extends keyof HTMLElementTagNameMap>(
   elType: T,
   styleObj: Record<string, string | number>,
-  parent: HTMLElement
+  parent: HTMLElement | DocumentFragment
 ): HTMLElementTagNameMap[T] => {
   const containerEl = document.createElement(elType)
   Object.keys(styleObj).forEach((key) => {
