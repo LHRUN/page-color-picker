@@ -13,14 +13,14 @@ export function isValidKey(
   return key in object
 }
 
-// export const toHex = (n: number) => `${n > 15 ? '' : 0}${n.toString(16)}`
 export const toHex = (n: number) => `0${n.toString(16)}`.slice(-2)
 
+/**
+ * rgba转16进制
+ * @param colorObj
+ * @returns
+ */
 export const toHexString = (colorObj: IColorObj) => {
-  // const { r, g, b, a = 1 } = colorObj
-  // return `#${toHex(r)}${toHex(g)}${toHex(b)}${
-  //   a === 1 ? '' : toHex(Math.floor(a * 255))
-  // }`
   let { r, g, b } = colorObj
   const { a } = colorObj
   r = Math.floor(r * a)
@@ -29,17 +29,24 @@ export const toHexString = (colorObj: IColorObj) => {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
+/**
+ * 创建元素
+ * @param elType 元素类型
+ * @param styleObj 样式对象
+ * @param parent 父级元素
+ * @returns element
+ */
 export const createDocument = <T extends keyof HTMLElementTagNameMap>(
   elType: T,
   styleObj: Record<string, string | number>,
   parent: HTMLElement | DocumentFragment
 ): HTMLElementTagNameMap[T] => {
-  const containerEl = document.createElement(elType)
+  const el = document.createElement(elType)
   Object.keys(styleObj).forEach((key) => {
     if (isValidKey(key, styleObj)) {
-      Reflect.set(containerEl.style, key, styleObj[key])
+      Reflect.set(el.style, key, styleObj[key])
     }
   })
-  parent.appendChild(containerEl)
-  return containerEl
+  parent.appendChild(el)
+  return el
 }

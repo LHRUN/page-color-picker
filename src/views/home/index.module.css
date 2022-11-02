@@ -1,0 +1,20 @@
+.conintaer{
+  display: flex;
+  border: solid 2px #000000;
+  padding: 30px;
+  border-radius: 10px;
+}
+.right {
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.colorItem {
+  margin-top: 10px;
+  border-radius: 8px;
+  padding: 0.6em 1.2em;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 1em;
+  cursor: pointer;
+}
