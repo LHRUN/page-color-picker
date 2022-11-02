@@ -1,10 +1,6 @@
 export const styleObj = {
   canvasContainer: {
     position: 'fixed',
-    top: '0px',
-    left: '0px',
-    width: '100vw',
-    height: '100vh',
     zIndex: 999,
     display: 'none',
     cursor: 'point'
@@ -13,18 +9,19 @@ export const styleObj = {
     position: 'absolute',
     top: '0px',
     left: '0px',
-    width: '100px',
-    height: '130px',
-    display: 'flex',
-    flexWrap: 'wrap',
+    width: '165px',
+    height: '195px',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(11, 15px)',
+    gridTemplateRows: 'repeat(11, 15px)',
     borderRadius: '5px',
     overflow: 'hidden'
   },
   colorItem: {
-    width: '20px',
-    height: '20px',
     border: 'solid 1px rgba(0,0,0,0.2)',
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    width: '15px',
+    height: '15px'
   },
   text: {
     width: '100px',

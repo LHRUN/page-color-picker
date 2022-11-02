@@ -1,18 +1,30 @@
-import { FC } from 'react'
+import { FC, useMemo, useRef } from 'react'
 import { ColorPicker } from '@/utils/colorPicker'
 
 const Home: FC = () => {
+  const scopeContainer = useRef<HTMLDivElement>(null)
+
   const colorChange = (color: string) => {
     console.log(color)
   }
-  const color = new ColorPicker(colorChange)
+  const colorPicker = useMemo(() => {
+    // if (scopeContainer.current) {
+    // return new ColorPicker(colorChange, scopeContainer.current)
+    return new ColorPicker(colorChange)
+    // }
+  }, [scopeContainer.current])
   const picker = () => {
-    color.initCanvas()
+    // if (colorPicker) {
+    colorPicker.initCanvas()
+    // }
   }
 
   return (
     <>
-      <button onClick={picker}>Picker</button>
+      <div ref={scopeContainer}>
+        {/* <img src="/color_select.jpg" width="500px" alt="" /> */}
+        <button onClick={picker}>Picker</button>
+      </div>
     </>
   )
 }

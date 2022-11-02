@@ -13,13 +13,20 @@ export function isValidKey(
   return key in object
 }
 
-export const toHex = (n: number) => `${n > 15 ? '' : 0}${n.toString(16)}`
+// export const toHex = (n: number) => `${n > 15 ? '' : 0}${n.toString(16)}`
+export const toHex = (n: number) => `0${n.toString(16)}`.slice(-2)
 
 export const toHexString = (colorObj: IColorObj) => {
-  const { r, g, b, a = 1 } = colorObj
-  return `#${toHex(r)}${toHex(g)}${toHex(b)}${
-    a === 1 ? '' : toHex(Math.floor(a * 255))
-  }`
+  // const { r, g, b, a = 1 } = colorObj
+  // return `#${toHex(r)}${toHex(g)}${toHex(b)}${
+  //   a === 1 ? '' : toHex(Math.floor(a * 255))
+  // }`
+  let { r, g, b } = colorObj
+  const { a } = colorObj
+  r = Math.floor(r * a)
+  g = Math.floor(g * a)
+  b = Math.floor(b * a)
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`
 }
 
 export const createDocument = <T extends keyof HTMLElementTagNameMap>(
