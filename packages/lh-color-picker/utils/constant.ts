@@ -14,14 +14,13 @@ export const styleObj = {
     left: '0px',
     width: '165px',
     height: '195px',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(11, 15px)',
-    gridTemplateRows: 'repeat(11, 15px)',
     borderRadius: '5px',
     overflow: 'hidden'
   },
   // 放大镜样式块
   colorItem: {
+    width: '15px',
+    height: '15px',
     border: 'solid 1px rgba(0,0,0,0.2)',
     boxSizing: 'border-box'
   },

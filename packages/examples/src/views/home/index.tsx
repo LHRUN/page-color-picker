@@ -1,5 +1,5 @@
 import { FC, useMemo, useState } from 'react'
-import { ColorPicker } from '@/utils/colorPicker'
+import { ColorPicker } from 'lh-color-picker'
 
 import classes from './index.module.css'
 let colorKey = 1

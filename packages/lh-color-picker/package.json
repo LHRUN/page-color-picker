@@ -1,0 +1,25 @@
+{
+  "name": "lh-color-picker",
+  "version": "1.0.0",
+  "description": "lh-color-picker",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [],
+  "author": "",
+  "type": "module",
+  "license": "ISC",
+  "dependencies": {
+    "html2canvas": "^1.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.19.6",
+    "@babel/preset-env": "^7.19.4",
+    "@babel/preset-typescript": "^7.18.6",
+    "@rollup/plugin-babel": "^6.0.2",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "rollup": "^3.2.5",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}

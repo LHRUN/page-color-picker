@@ -1,6 +1,6 @@
-import { createDocument, toHexString } from './tools'
+import { createDocument, toHexString } from './utils/tools'
 import html2canvas from 'html2canvas'
-import { styleObj } from './constant'
+import { styleObj } from './utils/constant'
 
 const COLOR_ROWS = 11
 const COLOR_COLUMNS = 11
