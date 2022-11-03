@@ -3,6 +3,10 @@ export const styleObj = {
   // canvas容器
   canvasContainer: {
     position: 'fixed',
+    top: '0px',
+    left: '0px',
+    width: '100vw',
+    height: '100vh',
     zIndex: 999,
     display: 'none',
     cursor: 'point'
@@ -15,7 +19,9 @@ export const styleObj = {
     width: '165px',
     height: '195px',
     borderRadius: '5px',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    display: 'none',
+    flexWrap: 'wrap'
   },
   // 放大镜样式块
   colorItem: {

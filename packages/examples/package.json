@@ -1,20 +1,20 @@
 {
   "name": "examples",
   "version": "1.0.0",
-  "description": "color-picker examples",
+  "description": "page-color-picker examples",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "node deploy.js"
+    "deploy": "node deploy.cjs"
   },
   "keywords": [],
   "author": "",
   "type": "module",
   "license": "ISC",
   "dependencies": {
-    "lh-color-picker": "workspace:*",
+    "page-color-picker": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

@@ -6,8 +6,6 @@ const COLOR_ROWS = 11
 const COLOR_COLUMNS = 11
 
 export class ColorPicker {
-  scopeContainer: HTMLElement // 选择范围元素
-  scopeRect: DOMRect // 选择元素矩形对象
   canvasContainer: HTMLDivElement | null = null // canvas容器元素
   canvas: HTMLCanvasElement | null = null // canvas实例
   context: CanvasRenderingContext2D | null = null
@@ -16,11 +14,8 @@ export class ColorPicker {
   color = '' // 颜色值
 
   constructor(
-    onChange?: (color: string) => void, // 点击后回调
-    scopeContainer: HTMLElement = document.body // 选择范围
+    onChange?: (color: string) => void // 点击后回调
   ) {
-    this.scopeContainer = scopeContainer
-    this.scopeRect = scopeContainer.getBoundingClientRect()
     this.onChange = onChange
   }
 
@@ -28,16 +23,12 @@ export class ColorPicker {
    * 初始化canvas容器
    * @returns canvas容器
    */
-  initContainer(scopeContainer: HTMLElement) {
-    const rect = scopeContainer.getBoundingClientRect()
-    const style = {
-      ...styleObj.canvasContainer,
-      width: `${rect.width}px`,
-      height: `${rect.height}px`,
-      top: `${rect.top}px`,
-      left: `${rect.left}px`
-    }
-    const canvasContainer = createDocument('div', style, scopeContainer)
+  initContainer() {
+    const canvasContainer = createDocument(
+      'div',
+      styleObj.canvasContainer,
+      document.body
+    )
     this.canvasContainer = canvasContainer
     return canvasContainer
   }
@@ -46,9 +37,8 @@ export class ColorPicker {
    * 初始化canvas
    */
   initCanvas() {
-    this.initContainer(this.scopeContainer)
-    html2canvas(this.scopeContainer).then((canvas) => {
-      console.log(canvas)
+    this.initContainer()
+    html2canvas(document.body).then((canvas) => {
       if (canvas && this.canvasContainer) {
         this.initEvent(canvas)
         this.canvasContainer.style.display = 'block'
@@ -76,15 +66,17 @@ export class ColorPicker {
    */
   canvasMouseMove = (e: MouseEvent) => {
     if (this.context) {
-      const { left, top } = this.scopeRect
-      const x = (e.pageX - Math.floor(left)) * 2
-      const y = (e.pageY - Math.floor(top)) * 2
+      const x = e.pageX * 2
+      const y = e.pageY * 2
 
       const hexStr = this.getColorHex(x, y)
       if (this.floatContainer && hexStr) {
         this.floatContainer.style.transform = `translate(${e.pageX + 10}px, ${
           e.pageY + 10
         }px )`
+        if (this.floatContainer.style.display === 'none') {
+          this.floatContainer.style.display = 'flex'
+        }
         const textEl = document.getElementById('colorText')
         if (textEl && hexStr) {
           textEl.textContent = hexStr
@@ -179,8 +171,8 @@ export class ColorPicker {
    * 结束销毁
    */
   destroy() {
-    if (this.canvasContainer && this.scopeContainer) {
-      this.scopeContainer.removeChild(this.canvasContainer)
+    if (this.canvasContainer) {
+      document.body.removeChild(this.canvasContainer)
     }
 
     if (this.canvas) {

@@ -1,5 +1,5 @@
-import { FC, useMemo, useState } from 'react'
-import { ColorPicker } from 'lh-color-picker'
+import { FC, useState } from 'react'
+import { ColorPicker } from 'page-color-picker'
 
 import classes from './index.module.css'
 let colorKey = 1
@@ -10,9 +10,6 @@ const Home: FC = () => {
       key: number
     }[]
   >([])
-  const [scopeContainer, setScopeContainer] = useState<HTMLDivElement | null>(
-    null
-  )
 
   const colorChange = (color: string) => {
     const newColors = [
@@ -25,11 +22,6 @@ const Home: FC = () => {
     setColors(newColors.slice(0, 5))
   }
 
-  // const colorPicker = useMemo(() => {
-  //   if (scopeContainer) {
-  //     return new ColorPicker(colorChange)
-  //   }
-  // }, [scopeContainer])
   const colorPicker = new ColorPicker(colorChange)
   const picker = () => {
     if (colorPicker) {
@@ -37,8 +29,12 @@ const Home: FC = () => {
     }
   }
 
+  const copyColor = (color: string) => {
+    alert(color)
+  }
+
   return (
-    <div className={classes.conintaer} ref={setScopeContainer}>
+    <div className={classes.conintaer}>
       <img src="/color_select.jpg" width="500px" alt="" />
       <div className={classes.right}>
         <button onClick={picker}>Picker</button>
@@ -47,6 +43,7 @@ const Home: FC = () => {
             key={key}
             className={classes.colorItem}
             style={{ backgroundColor: color }}
+            onClick={() => copyColor(color)}
           >
             {color}
           </div>

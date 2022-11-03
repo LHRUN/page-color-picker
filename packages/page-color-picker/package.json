@@ -1,8 +1,8 @@
 {
-  "name": "lh-color-picker",
-  "version": "1.0.0",
-  "description": "lh-color-picker",
-  "main": "./dist/index.js",
+  "name": "page-color-picker",
+  "version": "0.1.0",
+  "description": "page-color-picker",
+  "main": "index.ts",
   "scripts": {
     "build": "rollup -c"
   },

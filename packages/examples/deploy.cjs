@@ -5,7 +5,7 @@ ghpages.publish(
   'dist',
   {
     branch: 'gh-pages',
-    repo: 'https://github.com/LHRUN/lh-color-picker.git'
+    repo: 'https://github.com/LHRUN/page-color-picker.git'
   },
   function (err) {
     console.log(err)
