@@ -9,11 +9,11 @@ export const styleObj = {
     height: '100vh',
     zIndex: 999,
     display: 'none',
-    cursor: 'point'
+    cursor: 'none'
   },
   // 浮动容器
   floatContainer: {
-    position: 'absolute',
+    position: 'fixed',
     top: '0px',
     left: '0px',
     width: '165px',
@@ -21,7 +21,8 @@ export const styleObj = {
     borderRadius: '5px',
     overflow: 'hidden',
     display: 'none',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    zIndex: 1000
   },
   // 放大镜样式块
   colorItem: {

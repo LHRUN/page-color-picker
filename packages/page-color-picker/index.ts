@@ -1,9 +1,8 @@
-import { createDocument, toHexString } from './utils/tools'
+import { createDocument, getId, toHexString } from './utils/tools'
 import html2canvas from 'html2canvas'
 import { styleObj } from './utils/constant'
 
-const COLOR_ROWS = 11
-const COLOR_COLUMNS = 11
+const COLOR_ITEM_SIZE = 11
 
 export class ColorPicker {
   canvasContainer: HTMLDivElement | null = null // canvas容器元素
@@ -12,11 +11,13 @@ export class ColorPicker {
   floatContainer: HTMLDivElement | null = null // 鼠标移动时的浮动容器元素
   onChange?: (color: string) => void // 点击鼠标后的回调
   color = '' // 颜色值
+  elementId = '' // 唯一id
 
   constructor(
     onChange?: (color: string) => void // 点击后回调
   ) {
     this.onChange = onChange
+    this.elementId = getId()
   }
 
   /**
@@ -66,36 +67,38 @@ export class ColorPicker {
    */
   canvasMouseMove = (e: MouseEvent) => {
     if (this.context) {
-      const x = e.pageX * 2
-      const y = e.pageY * 2
-
-      const hexStr = this.getColorHex(x, y)
-      if (this.floatContainer && hexStr) {
-        this.floatContainer.style.transform = `translate(${e.pageX + 10}px, ${
-          e.pageY + 10
+      const x = e.pageX * window.devicePixelRatio
+      const y = e.pageY * window.devicePixelRatio
+      const colors = this.getColors(x, y)
+      if (this.floatContainer && colors) {
+        this.floatContainer.style.transform = `translate(${e.pageX - 82.5}px, ${
+          e.pageY - 82.5
         }px )`
         if (this.floatContainer.style.display === 'none') {
           this.floatContainer.style.display = 'flex'
         }
-        const textEl = document.getElementById('colorText')
-        if (textEl && hexStr) {
-          textEl.textContent = hexStr
-          textEl.style.color = hexStr
-        }
-        for (let i = 1; i <= COLOR_ROWS * COLOR_COLUMNS; i++) {
-          const itemEl = document.getElementById(`color${i}`)
+        const textEl = document.getElementById(`${this.elementId}text`)
+        for (
+          let i = 1, size = COLOR_ITEM_SIZE * COLOR_ITEM_SIZE;
+          i <= size;
+          i++
+        ) {
+          const itemEl = document.getElementById(`${this.elementId}${i}`)
+          const [r, g, b, a] = colors[i - 1]
+          const hexStr = toHexString({ r, g, b, a: a / 255 })
+          const row = Math.ceil(i / COLOR_ITEM_SIZE)
+          const col = i - (row - 1) * COLOR_ITEM_SIZE
 
-          const row = Math.ceil(i / COLOR_COLUMNS)
-          const col = i - (row - 1) * COLOR_COLUMNS
-          const itemX = col - 6 + x
-          const itemY = row - 6 + y
-          const itemColor = this.getColorHex(itemX, itemY)
+          if (row === 6 && col === 6 && textEl) {
+            textEl.textContent = hexStr
+            textEl.style.color = hexStr
+            this.color = hexStr
+          }
 
-          if (itemEl && itemColor) {
-            itemEl.style.backgroundColor = itemColor
+          if (itemEl) {
+            itemEl.style.backgroundColor = hexStr
           }
         }
-        this.color = hexStr
       }
     }
   }
@@ -114,15 +117,14 @@ export class ColorPicker {
    * @param y
    * @returns
    */
-  getColorHex(x: number, y: number) {
+  getColors(x: number, y: number) {
     if (this.context) {
-      const { data } = this.context.getImageData(x, y, 1, 1)
-      const r = data[0]
-      const g = data[1]
-      const b = data[2]
-      const a = data[3] / 255
-      const hexStr = toHexString({ r, g, b, a })
-      return hexStr
+      const { data } = this.context.getImageData(x - 5, y - 5, 11, 11)
+      const colors = []
+      for (let i = 0; i < data.length; i += 4) {
+        colors.push([data[i], data[i + 1], data[i + 2], data[i + 3]])
+      }
+      return colors
     }
   }
 
@@ -147,9 +149,9 @@ export class ColorPicker {
         this.canvasContainer
       )
       const fragment = document.createDocumentFragment()
-      for (let i = 1; i <= COLOR_ROWS * COLOR_COLUMNS; i++) {
-        const row = Math.ceil(i / COLOR_COLUMNS)
-        const col = i - (row - 1) * COLOR_COLUMNS
+      for (let i = 1; i <= COLOR_ITEM_SIZE * COLOR_ITEM_SIZE; i++) {
+        const row = Math.ceil(i / COLOR_ITEM_SIZE)
+        const col = i - (row - 1) * COLOR_ITEM_SIZE
         const style: Record<string, string | number> = {
           ...styleObj.colorItem
         }
@@ -158,11 +160,13 @@ export class ColorPicker {
           style.borderColor = '#000000'
         }
         const itemEl = createDocument('div', style, fragment)
-        itemEl.setAttribute('id', `color${i}`)
+        itemEl.setAttribute('id', `${this.elementId}${i}`)
       }
       floatContainer.appendChild(fragment)
       const textEl = createDocument('div', styleObj.text, floatContainer)
-      textEl.setAttribute('id', `colorText`)
+      textEl.setAttribute('id', `${this.elementId}text`)
+      floatContainer.addEventListener('mousemove', this.canvasMouseMove)
+      floatContainer.addEventListener('mousedown', this.canvasMouseDown)
       this.floatContainer = floatContainer
     }
   }
@@ -171,13 +175,16 @@ export class ColorPicker {
    * 结束销毁
    */
   destroy() {
-    if (this.canvasContainer) {
-      document.body.removeChild(this.canvasContainer)
-    }
-
     if (this.canvas) {
       this.canvas.removeEventListener('mousemove', this.canvasMouseMove)
       this.canvas.removeEventListener('mousedown', this.canvasMouseDown)
+    }
+    if (this.floatContainer) {
+      this.floatContainer.removeEventListener('mousemove', this.canvasMouseMove)
+      this.floatContainer.removeEventListener('mousedown', this.canvasMouseDown)
+    }
+    if (this.canvasContainer) {
+      document.body.removeChild(this.canvasContainer)
     }
     window.removeEventListener('keydown', this.onKeyDown)
   }
