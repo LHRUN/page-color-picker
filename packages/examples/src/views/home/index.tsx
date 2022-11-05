@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 import { ColorPicker } from 'page-color-picker'
+import color_select_src from '/color_select.jpg'
 
 import classes from './index.module.css'
 let colorKey = 1
@@ -35,7 +36,7 @@ const Home: FC = () => {
 
   return (
     <div className={classes.conintaer}>
-      <img src="/color_select.jpg" width="500px" alt="" />
+      <img src={color_select_src} width="500px" alt="" />
       <div className={classes.right}>
         <button onClick={picker}>Picker</button>
         {colors.map(({ color, key }) => (
