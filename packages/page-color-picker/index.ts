@@ -6,18 +6,22 @@ const COLOR_ITEM_SIZE = 11
 
 export class ColorPicker {
   canvasContainer: HTMLDivElement | null = null // canvas容器元素
-  canvas: HTMLCanvasElement | null = null // canvas实例
-  context: CanvasRenderingContext2D | null = null
+  canvas: HTMLCanvasElement | null = null // 截屏canvas
+  context: CanvasRenderingContext2D | null = null // 截屏canvas[context]
   floatContainer: HTMLDivElement | null = null // 鼠标移动时的浮动容器元素
   onChange?: (color: string) => void // 点击鼠标后的回调
   color = '' // 颜色值
-  elementId = '' // 唯一id
+  elementId = '' // 元素唯一id
+  colorArr: {
+    el: HTMLDivElement
+    row: number
+    col: number
+  }[] = [] // 放大镜颜色数组
 
   constructor(
     onChange?: (color: string) => void // 点击后回调
   ) {
     this.onChange = onChange
-    this.elementId = getId()
   }
 
   /**
@@ -35,9 +39,10 @@ export class ColorPicker {
   }
 
   /**
-   * 初始化canvas
+   * 开启取色器
    */
-  initCanvas() {
+  open() {
+    this.elementId = getId()
     this.initContainer()
     html2canvas(document.body).then((canvas) => {
       if (canvas && this.canvasContainer) {
@@ -46,7 +51,7 @@ export class ColorPicker {
         this.canvasContainer.appendChild(canvas)
         this.canvas = canvas
         this.context = canvas.getContext('2d')
-        this.showFloatCOntainer()
+        this.initFloatContainer()
       }
     })
   }
@@ -69,8 +74,10 @@ export class ColorPicker {
     if (this.context) {
       const x = e.pageX * window.devicePixelRatio
       const y = e.pageY * window.devicePixelRatio
+      // 获取放大镜所需区域颜色
       const colors = this.getColors(x, y)
       if (this.floatContainer && colors) {
+        // 根据坐标改变放大镜位置
         this.floatContainer.style.transform = `translate(${e.pageX - 82.5}px, ${
           e.pageY - 82.5
         }px )`
@@ -78,26 +85,25 @@ export class ColorPicker {
           this.floatContainer.style.display = 'flex'
         }
         const textEl = document.getElementById(`${this.elementId}text`)
+        // 遍历每个颜色块，修改颜色
         for (
-          let i = 1, size = COLOR_ITEM_SIZE * COLOR_ITEM_SIZE;
-          i <= size;
+          let i = 0, size = COLOR_ITEM_SIZE * COLOR_ITEM_SIZE;
+          i < size;
           i++
         ) {
-          const itemEl = document.getElementById(`${this.elementId}${i}`)
-          const [r, g, b, a] = colors[i - 1]
+          const { el, row, col } = this.colorArr[i]
+          const [r, g, b, a] = colors[i]
+          // toHexString rgba转16进制
           const hexStr = toHexString({ r, g, b, a: a / 255 })
-          const row = Math.ceil(i / COLOR_ITEM_SIZE)
-          const col = i - (row - 1) * COLOR_ITEM_SIZE
 
+          //  最中间的颜色保存起来
           if (row === 6 && col === 6 && textEl) {
             textEl.textContent = hexStr
             textEl.style.color = hexStr
             this.color = hexStr
           }
 
-          if (itemEl) {
-            itemEl.style.backgroundColor = hexStr
-          }
+          el.style.backgroundColor = hexStr
         }
       }
     }
@@ -112,14 +118,19 @@ export class ColorPicker {
   }
 
   /**
-   * 获取canvas颜色16进制
+   * 获取放大镜所需区域颜色
    * @param x
    * @param y
    * @returns
    */
   getColors(x: number, y: number) {
     if (this.context) {
-      const { data } = this.context.getImageData(x - 5, y - 5, 11, 11)
+      const { data } = this.context.getImageData(
+        x - 5,
+        y - 5,
+        COLOR_ITEM_SIZE,
+        COLOR_ITEM_SIZE
+      )
       const colors = []
       for (let i = 0; i < data.length; i += 4) {
         colors.push([data[i], data[i + 1], data[i + 2], data[i + 3]])
@@ -139,15 +150,18 @@ export class ColorPicker {
   }
 
   /**
-   * 展示浮动元素容器
+   * 初始化浮动元素容器
    */
-  showFloatCOntainer() {
+  initFloatContainer() {
     if (this.canvasContainer) {
+      // 创建浮动元素容器
       const floatContainer = createDocument(
         'div',
         styleObj.floatContainer,
         this.canvasContainer
       )
+
+      // 创建放大镜的小颜色块
       const fragment = document.createDocumentFragment()
       for (let i = 1; i <= COLOR_ITEM_SIZE * COLOR_ITEM_SIZE; i++) {
         const row = Math.ceil(i / COLOR_ITEM_SIZE)
@@ -161,6 +175,11 @@ export class ColorPicker {
         }
         const itemEl = createDocument('div', style, fragment)
         itemEl.setAttribute('id', `${this.elementId}${i}`)
+        this.colorArr.push({
+          el: itemEl,
+          row,
+          col
+        })
       }
       floatContainer.appendChild(fragment)
       const textEl = createDocument('div', styleObj.text, floatContainer)

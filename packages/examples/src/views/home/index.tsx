@@ -25,7 +25,7 @@ const Home: FC = () => {
   const colorPicker = new ColorPicker(colorChange)
   const picker = () => {
     if (colorPicker) {
-      colorPicker.initCanvas()
+      colorPicker.open()
     }
   }
 
