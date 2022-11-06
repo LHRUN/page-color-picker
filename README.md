@@ -1,7 +1,7 @@
 ## 页面颜色选择器
 纯JS实现的页面颜色选择器，只需在所需页面创建实例，然后在使用时调用`open`方法。  
 
-预览地址：[https://lhrun.github.io/page-color-picker/](https://lhrun.github.io/page-color-picker/)
+预览地址：[https://songlh.top/page-color-picker/](https://songlh.top/page-color-picker/)
 ![](https://s1.ax1x.com/2022/11/05/xOoXo4.png)
 
 ### 使用说明
