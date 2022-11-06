@@ -4,8 +4,33 @@
 预览地址：[https://lhrun.github.io/page-color-picker/](https://lhrun.github.io/page-color-picker/)
 ![](https://s1.ax1x.com/2022/11/05/xOoXo4.png)
 
+### 使用说明
+因为还未上传npm，如需导入使用，需要在packages/page-color-picker下执行构建命令，然后把构建后的文件移动到你的项目里，可按以下步骤操作
+```
+git clone https://github.com/LHRUN/page-color-picker.git
+cd page-color-picker
+pnpm install
+cd packages/page-color-picker
+pnpm run build
+cp -r dist ”所需文件夹“
+import { ColorPicker } from "所需文件夹/dist/index.js"
+```
+
+### Props
+
+|  name   | desc  |  type   | defaultValue  |
+|  ----  | ----  |  ----  | ----  |
+| onChange  | 创建实例时传入，用于鼠标点击后获取颜色值 | (color: string) => void | undefined |
+
+### Methods
+|  name   | desc  |  type   |
+|  ----  | ----  |  ----  |
+| open  | 开启颜色选择器 | () => void |
+
 ### examples
 ```
+git clone https://github.com/LHRUN/page-color-picker.git
+cd page-color-picker
 pnpm install
 cd packages/examples
 pnpm run dev
