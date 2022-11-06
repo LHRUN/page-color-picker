@@ -5,14 +5,14 @@ import { styleObj } from './utils/constant'
 const COLOR_ITEM_SIZE = 11
 
 export class ColorPicker {
-  canvasContainer: HTMLDivElement | null = null // canvas容器元素
-  canvas: HTMLCanvasElement | null = null // 截屏canvas
-  context: CanvasRenderingContext2D | null = null // 截屏canvas[context]
-  floatContainer: HTMLDivElement | null = null // 鼠标移动时的浮动容器元素
+  private canvasContainer: HTMLDivElement | null = null // canvas容器元素
+  private canvas: HTMLCanvasElement | null = null // 截屏canvas
+  private context: CanvasRenderingContext2D | null = null // 截屏canvas[context]
+  private floatContainer: HTMLDivElement | null = null // 鼠标移动时的浮动容器元素
   onChange?: (color: string) => void // 点击鼠标后的回调
   color = '' // 颜色值
-  elementId = '' // 元素唯一id
-  colorArr: {
+  private elementId = '' // 元素唯一id
+  private colorArr: {
     el: HTMLDivElement
     row: number
     col: number
@@ -28,7 +28,7 @@ export class ColorPicker {
    * 初始化canvas容器
    * @returns canvas容器
    */
-  initContainer() {
+  private initContainer() {
     const canvasContainer = createDocument(
       'div',
       styleObj.canvasContainer,
@@ -60,7 +60,7 @@ export class ColorPicker {
    * 初始化事件
    * @param canvas
    */
-  initEvent(canvas: HTMLCanvasElement) {
+  private initEvent(canvas: HTMLCanvasElement) {
     canvas.addEventListener('mousemove', this.canvasMouseMove)
     canvas.addEventListener('mousedown', this.canvasMouseDown)
     window.addEventListener('keydown', this.onKeyDown)
@@ -70,7 +70,7 @@ export class ColorPicker {
    * canvas移动事件
    * @param e
    */
-  canvasMouseMove = (e: MouseEvent) => {
+  private canvasMouseMove = (e: MouseEvent) => {
     if (this.context) {
       const x = e.pageX * window.devicePixelRatio
       const y = e.pageY * window.devicePixelRatio
@@ -112,7 +112,7 @@ export class ColorPicker {
   /**
    * 监听鼠标按下
    */
-  canvasMouseDown = () => {
+  private canvasMouseDown = () => {
     this?.onChange?.(this.color)
     this.destroy()
   }
@@ -123,7 +123,7 @@ export class ColorPicker {
    * @param y
    * @returns
    */
-  getColors(x: number, y: number) {
+  private getColors(x: number, y: number) {
     if (this.context) {
       const { data } = this.context.getImageData(
         x - 5,
@@ -143,7 +143,7 @@ export class ColorPicker {
    * esc按键监听
    * @param e
    */
-  onKeyDown = (e: KeyboardEvent) => {
+  private onKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Escape') {
       this.destroy()
     }
@@ -152,7 +152,7 @@ export class ColorPicker {
   /**
    * 初始化浮动元素容器
    */
-  initFloatContainer() {
+  private initFloatContainer() {
     if (this.canvasContainer) {
       // 创建浮动元素容器
       const floatContainer = createDocument(
