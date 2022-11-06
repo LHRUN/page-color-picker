@@ -81,8 +81,8 @@ export class ColorPicker {
         this.floatContainer.style.transform = `translate(${e.pageX - 82.5}px, ${
           e.pageY - 82.5
         }px )`
-        if (this.floatContainer.style.display === 'none') {
-          this.floatContainer.style.display = 'flex'
+        if (this.floatContainer.style.visibility === 'hidden') {
+          this.floatContainer.style.visibility = 'visible'
         }
         const textEl = document.getElementById(`${this.elementId}text`)
         // 遍历每个颜色块，修改颜色

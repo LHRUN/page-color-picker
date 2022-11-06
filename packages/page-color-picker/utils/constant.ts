@@ -20,7 +20,8 @@ export const styleObj = {
     height: '195px',
     borderRadius: '5px',
     overflow: 'hidden',
-    display: 'none',
+    display: 'flex',
+    visibility: 'hidden',
     flexWrap: 'wrap',
     zIndex: 1000
   },
