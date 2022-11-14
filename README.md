@@ -9,7 +9,7 @@
 
 Link: [https://songlh.top/page-color-picker/](https://songlh.top/page-color-picker/)
 
-![](https://s1.ax1x.com/2022/11/05/xOoXo4.png)
+<image src="https://s1.ax1x.com/2022/11/05/xOoXo4.png" width="500" />
 
 ## Usage
 
@@ -41,7 +41,7 @@ import { ColorPicker } from "<folder>/dist/index.js"
 |  ----  | ----  |  ----  |
 | `open`  | open color picker | () => void |
 
-## examples
+## Examples
 ```bash
 git clone https://github.com/LHRUN/page-color-picker.git
 cd page-color-picker
@@ -50,7 +50,7 @@ cd packages/examples
 pnpm run dev
 ```
 
-## file list
+## File List
 ```js
 ├─ packages
 │  ├─ examples
